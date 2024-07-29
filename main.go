@@ -38,7 +38,7 @@ func processor(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("emailUser")
 	password := r.FormValue("passwordUser")
 
-	if password != "bigbears" {
+	if password != "blyatiful" {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
