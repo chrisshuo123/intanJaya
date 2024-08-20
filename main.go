@@ -15,6 +15,9 @@ func init() {
 }
 
 func main() {
+	// Serve static files from the "static" directory
+	ServeStatic("/assets/", "./templates/assets")
+
 	// Switcher
 	http.HandleFunc("/", index)
 	http.HandleFunc("/process", processor)
@@ -23,11 +26,25 @@ func main() {
 	}
 }
 
+// Static: Calls HTML Bootstrap
+func ServeStatic(route string, directory string) {
+	// FileServer returns a handler that serves HTTP requests with the contents of the file system rooted at directory
+	fs := http.FileServer(http.Dir(directory))
+	// StripPrefix returns a handler that serves HTTP requests by removing the given prefix from the request URL's Path
+	http.Handle(route, http.StripPrefix(route, fs))
+}
+
 // Request
 // Web is about making certain amount of requests
 func index(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "index.html", nil)
 }
+
+/* Using the ServeFile
+func index(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "index.html")
+}
+*/
 
 func processor(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
